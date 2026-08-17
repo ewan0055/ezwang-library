@@ -82,11 +82,9 @@
       <p>Toggle visibility based on a condition.</p>
       <!-- Activity 4.1: Toggle the message visibility when the button is clicked. -->
       <button @click="showMessage = !showMessage">Toggle Message</button>
-      
-      <!-- 当 showMessage 为 true 时显示 -->
+    
       <p v-if="showMessage" class="message success">✨ You're a Vue superstar! ✨</p>
       
-      <!-- 当 showMessage 为 false 时显示 -->
       <p v-else class="message">Click the button to see a message.</p>
     </section>
 
@@ -130,7 +128,7 @@ const allFamousWorks = computed(() => {
 })
 // Activity 5: Class & Style Binding (Author Highlight)
 const targetAuthorName = ref('George Orwell')
-const highlightColor = ref('#ffeb3b') // 鲜艳的亮黄色
+const highlightColor = ref('#ffeb3b') 
 </script>
 
 <style scoped>
@@ -174,10 +172,10 @@ h1 {
 
 .highlight {
   font-weight: bold;
-  color: #d32f2f; /* 鲜艳的深红色文字 */
+  color: #d32f2f;
   padding: 6px 12px;
   border-radius: 6px;
-  border: 2px solid #fbc02d; /* 金黄色边框，极为醒目 */
+  border: 2px solid #fbc02d; 
   display: inline-block;
   margin: 2px 0;
 }
