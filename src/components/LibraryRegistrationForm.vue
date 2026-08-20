@@ -41,9 +41,11 @@
                   class="form-check-input" 
                   id="isAustralian" 
                   v-model="formData.isAustralian" 
+                  @change="() => validateResident(true)"
                 />
                 <label class="form-check-label" for="isAustralian">Australian Resident?</label>
               </div>
+              <div v-if="errors.resident" class="text-danger">{{ errors.resident }}</div>
             </div>
             <div class="col-md-6 col-sm-6">
               <label for="gender" class="form-label">Gender</label>
@@ -71,7 +73,10 @@
               id="reason" 
               rows="3" 
               v-model="formData.reason"
+              @blur="() => validateReason(true)"
+              @input="() => validateReason(false)"
             ></textarea>
+            <div v-if="errors.reason" class="text-danger">{{ errors.reason }}</div>
           </div>
 
           <!-- Buttons Row -->
@@ -106,7 +111,7 @@
 import { ref } from 'vue'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-//
+
 const formData = ref({
   username: '',
   password: '',
@@ -115,39 +120,7 @@ const formData = ref({
   gender: ''
 })
 
-// 
 const submittedCards = ref([])
-
-
-// 
-const submitForm = () => {
-  validateName(true);
-  validatePassword(true);
-  validateGender(true);
-  if (!errors.value.username && !errors.value.password) {
-    submittedCards.value.push({ ...formData.value });
-    clearForm();
-  }
-};
-
-const validateGender = (blur) => {
-  if (!formData.value.gender) {
-    if (blur) errors.value.gender = "Please select a gender.";
-  } else {
-    errors.value.gender = null;
-  }
-};
-
-// 
-const clearForm = () => {
-  formData.value = {
-    username: '',
-    password: '',
-    isAustralian: false,
-    reason: '',
-    gender: ''
-  }
-}
 
 const errors = ref({
   username: null,
@@ -157,6 +130,7 @@ const errors = ref({
   reason: null,
 });
 
+// 1. Username 
 const validateName = (blur) => {
   if (formData.value.username.length < 3) {
     if (blur) errors.value.username = "Name must be at least 3 characters";
@@ -165,6 +139,7 @@ const validateName = (blur) => {
   }
 };
 
+// 2. Password
 const validatePassword = (blur) => {
   const password = formData.value.password;
   const minLength = 8;
@@ -186,6 +161,73 @@ const validatePassword = (blur) => {
   } else {
     errors.value.password = null;
   }
+};
+
+// 3. Gender 
+const validateGender = (blur) => {
+  if (!formData.value.gender) {
+    if (blur) errors.value.gender = "Please select a gender.";
+  } else {
+    errors.value.gender = null;
+  }
+};
+
+// 4. Resident 
+const validateResident = (blur) => {
+  if (!formData.value.isAustralian) {
+    if (blur) errors.value.resident = "You must be an Australian resident to register.";
+  } else {
+    errors.value.resident = null;
+  }
+};
+
+// 5
+const validateReason = (blur) => {
+  if (formData.value.reason.length < 10) {
+    if (blur) errors.value.reason = "Reason must be at least 10 characters long.";
+  } else {
+    errors.value.reason = null;
+  }
+};
+
+//
+const submitForm = () => {
+  // 
+  validateName(true);
+  validatePassword(true);
+  validateGender(true);
+  validateResident(true);
+  validateReason(true);
+
+  // 
+  if (
+    !errors.value.username && 
+    !errors.value.password && 
+    !errors.value.gender && 
+    !errors.value.resident && 
+    !errors.value.reason
+  ) {
+    submittedCards.value.push({ ...formData.value });
+    clearForm();
+  }
+};
+
+//
+const clearForm = () => {
+  formData.value = {
+    username: '',
+    password: '',
+    isAustralian: false,
+    reason: '',
+    gender: ''
+  };
+  errors.value = {
+    username: null,
+    password: null,
+    resident: null,
+    gender: null,
+    reason: null,
+  };
 };
 </script>
 
