@@ -1,35 +1,82 @@
 @import './base.css';
 
+/* Green Futures Melbourne global layout */
+:root {
+  color: #1f2933;
+  background: #f7faf8;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f7faf8;
+  color: #1f2933;
+}
+
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  min-height: 100vh;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   font-weight: normal;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+h1,
+h2 {
+  color: #163b2b;
+  font-weight: 700;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
+.navbar-brand {
+  white-space: normal;
+}
+
+.navbar-nav {
+  flex-wrap: wrap;
+}
+
+.card {
+  border: 0;
+  border-radius: 0.75rem;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.2);
+}
+
+footer {
+  background: #ffffff;
+}
+
+/* A.2 responsiveness: layout remains readable on small phones. */
+@media (max-width: 575.98px) {
+  .navbar {
+    align-items: flex-start;
   }
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+  .navbar-nav {
+    width: 100%;
+    margin-top: 0.75rem;
+  }
+
+  .navbar-nav .btn {
+    flex: 1 1 auto;
+  }
+
+  main.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
   }
 }
