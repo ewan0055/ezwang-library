@@ -65,7 +65,7 @@ function clearSelectedEvent() {
 
   <footer class="border-top py-4">
     <div class="container small text-muted">
-      Green Futures Melbourne — A FIT5032 student project.
+      Green Futures Melbourne 
     </div>
   </footer>
 </template>
