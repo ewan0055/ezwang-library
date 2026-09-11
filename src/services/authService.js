@@ -1,5 +1,5 @@
 const USERS_KEY = 'gfmUsers'
-
+const SESSION_KEY = 'gfmCurrentUser'
 function readUsers(storage) {
   const savedUsers = storage.getItem(USERS_KEY)
   return savedUsers ? JSON.parse(savedUsers) : []
@@ -102,7 +102,14 @@ export function createAuthService(storage) {
         throw new Error('Invalid email or password.')
       }
 
-      return publicUser(user)
+      const sessionUser = publicUser(user)
+      storage.setItem(SESSION_KEY, JSON.stringify(sessionUser))
+
+      return sessionUser
     },
-  }
+    getSession() {
+    const savedSession = storage.getItem(SESSION_KEY)
+    return savedSession ? JSON.parse(savedSession) : null
+},
+}
 }

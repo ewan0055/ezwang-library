@@ -46,3 +46,18 @@ test('seeded Coordinator can log in', async () => {
 
   assert.equal(coordinator.role, 'coordinator')
 })
+
+test('login saves a safe session for the authenticated user', async () => {
+  const storage = createMemoryStorage()
+  const auth = createAuthService(storage)
+
+  await auth.seedCoordinator()
+
+  const user = await auth.login(
+    'coordinator@greenfutures.org.au',
+    'Green2026!',
+  )
+
+  assert.deepEqual(auth.getSession(), user)
+  assert.doesNotMatch(storage.getItem('gfmCurrentUser'), /Green2026!/)
+})

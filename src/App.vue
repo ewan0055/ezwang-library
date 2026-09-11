@@ -9,8 +9,15 @@ import ResourceHub from './components/ResourceHub.vue'
 import EventList from './components/EventList.vue'
 import ActivityRegistrationForm from './components/ActivityRegistrationForm.vue'
 
+// ===== A1.3 authentication components =====
+import AuthPanel from './components/AuthPanel.vue'
+import { createAuthService } from './services/authService.js'
+
+const auth = createAuthService(localStorage)
+
 const currentView = ref('resources')
 const selectedEventId = ref(null)
+const currentUser = ref(auth.getSession())
 
 function changeView(viewName) {
   currentView.value = viewName
@@ -24,6 +31,11 @@ function joinEvent(eventId) {
 function clearSelectedEvent() {
   selectedEventId.value = null
 }
+
+function handleAuthenticated(user) {
+  currentUser.value = user
+  currentView.value = 'resources'
+}
 </script>
 
 <template>
@@ -34,16 +46,25 @@ function clearSelectedEvent() {
   </main>
   -->
 
-  <!-- ===== Green Futures Melbourne A1.2 application ===== -->
   <GfmNavigation
     :current-view="currentView"
+    :current-user="currentUser"
     @change-view="changeView"
   />
 
   <header class="bg-light border-bottom">
-    <div class="container py-4">
+    <div
+      class="container py-4 d-flex flex-column flex-md-row justify-content-between gap-2"
+    >
       <p class="mb-0 text-muted">
         Local climate learning, wellbeing support, and practical community action.
+      </p>
+
+      <p v-if="currentUser" class="mb-0">
+        Signed in as <strong>{{ currentUser.name }}</strong>
+        <span class="badge text-bg-success ms-1 text-capitalize">
+          {{ currentUser.role }}
+        </span>
       </p>
     </div>
   </header>
@@ -61,11 +82,16 @@ function clearSelectedEvent() {
       :selected-event-id="selectedEventId"
       @registration-complete="clearSelectedEvent"
     />
+
+    <AuthPanel
+      v-else-if="currentView === 'account'"
+      @authenticated="handleAuthenticated"
+    />
   </main>
 
   <footer class="border-top py-4">
     <div class="container small text-muted">
-      Green Futures Melbourne 
+      Green Futures Melbourne
     </div>
   </footer>
 </template>

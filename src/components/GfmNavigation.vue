@@ -4,6 +4,10 @@ defineProps({
     type: String,
     required: true,
   },
+  currentUser: {
+    type: Object,
+    default: null,
+  },
 })
 
 defineEmits(['change-view'])
@@ -22,7 +26,7 @@ defineEmits(['change-view'])
       Green Futures Melbourne
     </a>
 
-    <div class="navbar-nav ms-md-auto flex-row gap-2">
+    <div class="navbar-nav ms-md-auto flex-row align-items-center gap-2">
       <button
         class="btn btn-sm"
         :class="currentView === 'resources' ? 'btn-light' : 'btn-outline-light'"
@@ -46,6 +50,19 @@ defineEmits(['change-view'])
       >
         Join an activity
       </button>
+
+      <button
+        v-if="!currentUser"
+        class="btn btn-sm"
+        :class="currentView === 'account' ? 'btn-light' : 'btn-outline-light'"
+        @click="$emit('change-view', 'account')"
+      >
+        Login
+      </button>
+
+      <span v-else class="navbar-text small text-white">
+        Hi, {{ currentUser.name }}
+      </span>
     </div>
   </nav>
 </template>
