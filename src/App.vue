@@ -12,7 +12,7 @@ import ActivityRegistrationForm from './components/ActivityRegistrationForm.vue'
 // ===== A1.3 authentication components =====
 import AuthPanel from './components/AuthPanel.vue'
 import { createAuthService } from './services/authService.js'
-
+import CoordinatorDashboard from './components/CoordinatorDashboard.vue'
 const auth = createAuthService(localStorage)
 
 const currentView = ref('resources')
@@ -83,6 +83,11 @@ function handleAuthenticated(user) {
       @registration-complete="clearSelectedEvent"
     />
 
+    <CoordinatorDashboard
+      v-else-if="currentView === 'dashboard'"
+      :current-user="currentUser"
+    />
+    
     <AuthPanel
       v-else-if="currentView === 'account'"
       @authenticated="handleAuthenticated"

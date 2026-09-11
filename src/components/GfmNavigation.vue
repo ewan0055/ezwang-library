@@ -52,6 +52,15 @@ defineEmits(['change-view'])
       </button>
 
       <button
+        v-if="currentUser && currentUser.role === 'coordinator'"
+        class="btn btn-sm"
+        :class="currentView === 'dashboard' ? 'btn-light' : 'btn-outline-light'"
+        @click="$emit('change-view', 'dashboard')"
+      >
+        Dashboard
+      </button>
+      
+      <button
         v-if="!currentUser"
         class="btn btn-sm"
         :class="currentView === 'account' ? 'btn-light' : 'btn-outline-light'"
