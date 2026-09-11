@@ -1,10 +1,39 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { resources } from '../data/gfmData'
+import { createReviewService } from '../services/reviewService.js'
+import ResourceReviewForm from './ResourceReviewForm.vue'
+
+const props = defineProps({
+  currentUser: {
+    type: Object,
+    default: null,
+  },
+})
 
 const selectedCategory = ref('All')
+const refreshKey = ref(0)
+const reviewService = createReviewService(localStorage)
 
 const categories = ['All', 'Wellbeing', 'Learning', 'Action']
+
+const resourcesWithRatings = computed(() => {
+  refreshKey.value
+
+  return resources.map((resource) => {
+    const reviews = reviewService.getReviewsForResource(resource.id)
+
+    return {
+      ...resource,
+      reviewCount: reviews.length,
+      averageRating: reviewService.getAverageRating(resource.id),
+    }
+  })
+})
+
+function refreshRatings() {
+  refreshKey.value += 1
+}
 </script>
 
 <template>
@@ -35,7 +64,7 @@ const categories = ['All', 'Wellbeing', 'Learning', 'Action']
 
     <div class="row g-4">
       <div
-        v-for="resource in resources"
+        v-for="resource in resourcesWithRatings"
         :key="resource.id"
         v-show="
           selectedCategory === 'All' ||
@@ -55,9 +84,30 @@ const categories = ['All', 'Wellbeing', 'Learning', 'Action']
               {{ resource.description }}
             </p>
 
-            <p class="small text-muted mt-auto mb-0">
+            <p class="small text-muted mb-2">
               {{ resource.duration }}
             </p>
+
+            <p
+              v-if="resource.reviewCount > 0"
+              class="small mb-0"
+              aria-label="Average resource rating"
+            >
+              <span class="text-warning" aria-hidden="true">★</span>
+              <strong>{{ resource.averageRating.toFixed(1) }} / 5</strong>
+              · {{ resource.reviewCount }}
+              {{ resource.reviewCount === 1 ? 'review' : 'reviews' }}
+            </p>
+
+            <p v-else class="small text-muted mb-0">
+              No ratings yet
+            </p>
+
+            <ResourceReviewForm
+              :resource-id="resource.id"
+              :current-user="props.currentUser"
+              @review-submitted="refreshRatings"
+            />
           </div>
         </article>
       </div>

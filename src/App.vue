@@ -70,7 +70,10 @@ function handleAuthenticated(user) {
   </header>
 
   <main class="container py-5">
-    <ResourceHub v-if="currentView === 'resources'" />
+    <ResourceHub
+    v-if="currentView === 'resources'"
+    :current-user="currentUser"
+    />
 
     <EventList
       v-else-if="currentView === 'events'"
@@ -87,7 +90,7 @@ function handleAuthenticated(user) {
       v-else-if="currentView === 'dashboard'"
       :current-user="currentUser"
     />
-    
+
     <AuthPanel
       v-else-if="currentView === 'account'"
       @authenticated="handleAuthenticated"
