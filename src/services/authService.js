@@ -108,8 +108,12 @@ export function createAuthService(storage) {
       return sessionUser
     },
     getSession() {
-    const savedSession = storage.getItem(SESSION_KEY)
-    return savedSession ? JSON.parse(savedSession) : null
+  const savedSession = storage.getItem(SESSION_KEY)
+  return savedSession ? JSON.parse(savedSession) : null
+},
+
+logout() {
+  storage.removeItem(SESSION_KEY)
 },
 }
 }

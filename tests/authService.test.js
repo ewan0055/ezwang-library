@@ -61,3 +61,19 @@ test('login saves a safe session for the authenticated user', async () => {
   assert.deepEqual(auth.getSession(), user)
   assert.doesNotMatch(storage.getItem('gfmCurrentUser'), /Green2026!/)
 })
+
+test('logout removes the saved user session', async () => {
+  const storage = createMemoryStorage()
+  const auth = createAuthService(storage)
+
+  await auth.seedCoordinator()
+  await auth.login(
+    'coordinator@greenfutures.org.au',
+    'Green2026!',
+  )
+
+  auth.logout()
+
+  assert.equal(auth.getSession(), null)
+  assert.equal(storage.getItem('gfmCurrentUser'), null)
+})

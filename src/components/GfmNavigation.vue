@@ -10,7 +10,7 @@ defineProps({
   },
 })
 
-defineEmits(['change-view'])
+defineEmits(['change-view', 'logout'])
 </script>
 
 <template>
@@ -59,7 +59,7 @@ defineEmits(['change-view'])
       >
         Dashboard
       </button>
-      
+
       <button
         v-if="!currentUser"
         class="btn btn-sm"
@@ -69,9 +69,18 @@ defineEmits(['change-view'])
         Login
       </button>
 
-      <span v-else class="navbar-text small text-white">
+      <span v-if="currentUser" class="navbar-text small text-white">
         Hi, {{ currentUser.name }}
       </span>
+
+      <button
+        v-if="currentUser"
+        class="btn btn-sm btn-outline-light"
+        type="button"
+        @click="$emit('logout')"
+      >
+        Logout
+      </button>
     </div>
   </nav>
 </template>

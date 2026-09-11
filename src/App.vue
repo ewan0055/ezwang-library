@@ -36,6 +36,12 @@ function handleAuthenticated(user) {
   currentUser.value = user
   currentView.value = 'resources'
 }
+
+function handleLogout() {
+  auth.logout()
+  currentUser.value = null
+  currentView.value = 'resources'
+}
 </script>
 
 <template>
@@ -50,6 +56,7 @@ function handleAuthenticated(user) {
     :current-view="currentView"
     :current-user="currentUser"
     @change-view="changeView"
+    @logout="handleLogout"
   />
 
   <header class="bg-light border-bottom">
